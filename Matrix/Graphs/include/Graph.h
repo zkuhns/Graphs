@@ -3,8 +3,7 @@
 
 #include <vector>
 #include <string>
-
-// Matrix
+#include <iostream>
 
 class Graph
 {
@@ -12,28 +11,41 @@ class Graph
         Graph();
         virtual ~Graph();
 
-        void set_directed(bool directed);
-        bool is_directed();
-        void set_weighted(bool weighted);
-        bool is_weighted();
+        bool isDirected();
+        bool isWeighted();
 
-        bool has_vertex(std::string);
-        bool insert_vertex(std::string);
-        bool remove_vertex(std::string);
+        void setDirected(bool directed);
+        void setWeighted(bool weighted);
 
-        bool has_edge(std::string);
-        bool insert_edge(std::string);
-        bool remove_edge(std::string);
+        /* Vertex manipulation */
+        bool hasVertex(std::string name_one);
+        bool addVertex(std::string name_one);
+        bool deleteVertex(std::string name_one);
+
+        /* Edge manipulation */
+        bool hasEdge(std::string name_one, std::string name_two);
+        bool addEdge(std::string name_one, std::string name_two, float weight);
+        bool deleteEdge(std::string name_one, std::string name_two);
+
+        /* Connectivity */
+        bool isFullyConnected();
+        bool isFullyDisconnected();
+        bool isConnected();
+
+        void printGraph();
     protected:
     private:
-        std::vector< std::string > vertices;
-        std::vector< std::vector< int > > edges;
-
-        int vertex_count;
-        int edge_count;
-
         bool weighted;
         bool directed;
+
+        int edge_count;
+        int vertex_count;
+
+        std::vector < std::string > vertices;
+        std::vector < std::vector <float > > weights;
+
+        int vertexIndex(std::string name_one);
+        int insertIndex(std::string name_one);
 };
 
 #endif // GRAPH_H

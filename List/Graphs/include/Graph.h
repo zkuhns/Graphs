@@ -2,37 +2,66 @@
 #define GRAPH_H
 
 #include <vector>
-#include <string>
+#include <iostream>
+#include <limits>
 
-//List
-class Graph
-{
+#include <Vertex.h>
+
+class Graph {
     public:
         Graph();
         virtual ~Graph();
 
-        void set_directed(bool directed);
-        bool is_directed();
-        void set_weighted(bool weighted);
-        bool is_weighted();
+        void setWeighted(bool weighted);
+        void setDirected(bool directed);
 
-        bool has_vertex(std::string);
-        bool insert_vertex(std::string);
-        bool remove_vertex(std::string);
+        bool isWeighted();
+        bool isDirected();
 
-        bool has_edge(std::string);
-        bool insert_edge(std::string);
-        bool remove_edge(std::string);
+        int getVertexIndex(std::string id);
+        int getInsertIndex(std::string id);
+
+        bool hasVertex(std::string id);
+        bool addVertex(std::string id);
+        bool deleteVertex(std::string id);
+
+        float getEdgeWeight(std::string id_one, std::string id_two);
+        bool hasEdge(std::string id_one, std::string id_two);
+        bool addEdge(std::string id_one, std::string id_two);
+        bool addEdge(std::string id_one, std::string id_two, float weight);
+        bool deleteEdge(std::string id_one, std::string id_two);
+
+        double getDensity();
+        bool isSparse();
+        bool isDense();
+
+        bool isConnected(Vertex* pointer);
+        bool isConnected();
+
+        bool isFullyConnected();
+        bool isFullyDisconnected();
+
+        bool isStar();
+        bool isRing();
+
+        int clique(int num);
+        int clique(int num, int current_num, int index, std::vector < Vertex* > clique);
+
+        int getShortestDistance(std::string vertex_one, std::string vertex_two);
+        std::vector < Vertex* > getShortestPath(std::string vertex_one, std::string vertex_two);
+
+        int getMaxEdges();
+
+        void printGraph();
     protected:
     private:
-        std::vector< std::string > vertices;
-        std::vector< std::string > edges;
+        bool weighted;
+        bool directed;
 
         int vertex_count;
         int edge_count;
 
-        bool weighted;
-        bool directed;
+        std::vector < Vertex* > vertices;
 };
 
 #endif // GRAPH_H
