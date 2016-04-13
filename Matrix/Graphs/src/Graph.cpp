@@ -67,13 +67,30 @@ bool Graph::remove_vertex(std::string vertex_one) {
         return false;
     }
 
+    for (int i = 0; i < vertex_count; i++) {
+        if (edges[i][remove_index] != -1) {
+            edge_count--;
+        }
+        if (edges[remove_index][i] != -1) {
+            edge_count--;
+        }
+        edges[i].erase(edges[i].begin() + remove_index);
+    }
+    edges.erase(edges.begin() + remove_index);
+
     /* Remove the vertex from the vertices vector */
     vertices.erase(vertices.begin()+remove_index);
     vertex_count--;
 
+    for (int i = 0; i < vertex_count; i++) {
+
+    }
+
     return true;
 }
 
+/* Returns true if the edge exists between two
+ * vertices */
 bool Graph::has_edge(std::string vertex_one, std::string vertex_two) {
     int index_one = get_vertex_index(vertex_one);
     if (index_one == -1) {
@@ -91,6 +108,9 @@ bool Graph::has_edge(std::string vertex_one, std::string vertex_two) {
     return true;
 }
 
+/* Attempts to insert an edge between two vertices
+ * returns true if the action was successful
+ * false otherwise */
 bool Graph::insert_edge(std::string vertex_one, std::string vertex_two, float weight) {
     int index_one = get_vertex_index(vertex_one);
     if (index_one == -1) {
@@ -115,6 +135,8 @@ bool Graph::insert_edge(std::string vertex_one, std::string vertex_two, float we
     return true;
 }
 
+/* Attempts to remove an edge returns true
+ * if the action is successful false otherwise */
 bool Graph::remove_edge(std::string vertex_one, std::string vertex_two) {
     int index_one = get_vertex_index(vertex_one);
     if (index_one == -1) {
@@ -138,6 +160,54 @@ bool Graph::remove_edge(std::string vertex_one, std::string vertex_two) {
     return true;
 }
 
+bool Graph::is_connected() {
+    return true;
+}
+
+bool Graph::is_connected(std::string vertex_one) {
+    int index = get_vertex_index(vertex_one);
+    if (index == -1) {
+        return false;
+    }
+
+    std::vector< std::string > connected;
+    std::vector< std::string > disconnected = vertices;
+    connected.push_back(vertex_one);
+    disconnected.erase(disconnected.begin() + index);
+
+    while (connected.size() > 0) {
+        for (int i = 0; i < disconnected.size(); i++) {
+            if (has_edge(connected[0], disconnected[i])) {
+                disconnected.erase(disconnected.begin() + i);
+                i--;
+            }
+        }
+
+        connected.erase(connected.begin());
+    }
+
+    if (disconnected.size() > 0) {
+        return false;
+    }
+
+    return true;
+}
+
+bool Graph::is_fully_connected() {
+    if (edge_count == (vertex_count-1)*vertex_count) {
+        return true;
+    }
+    return false;
+}
+
+bool Graph::is_fully_disconnected() {
+    if (edge_count == 0) {
+        return true;
+    }
+    return false;
+}
+
+/* Returns a string represntation of the graph */
 std::string Graph::to_string() {
     std::ostringstream ss;
     std::string return_string;
@@ -194,6 +264,8 @@ int Graph::get_vertex_index(std::string vertex_one) {
     return -1;
 }
 
+/* Gets the expected index of a vertex insertion
+ * returns -1 if the vertex already exists */
 int Graph::get_insert_vertex_index(std::string vertex_one) {
     if (vertex_count == 0) {
         return 0;

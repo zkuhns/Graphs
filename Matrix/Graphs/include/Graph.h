@@ -28,6 +28,7 @@ class Graph
         bool remove_edge(std::string vertex_one, std::string vertex_two);
 
         bool is_connected();
+        bool is_connected(std::string vertex_one);
         bool is_fully_connected();
         bool is_fully_disconnected();
 
