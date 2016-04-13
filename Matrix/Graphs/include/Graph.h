@@ -1,9 +1,12 @@
+/*
+Matrix implementation
+*/
+
 #ifndef GRAPH_H
 #define GRAPH_H
 
 #include <vector>
 #include <string>
-#include <iostream>
 
 class Graph
 {
@@ -11,41 +14,32 @@ class Graph
         Graph();
         virtual ~Graph();
 
-        bool isDirected();
-        bool isWeighted();
+        bool has_vertex(std::string vertex_one);
+        bool insert_vertex(std::string vertex_one);
+        bool remove_vertex(std::string vertex_one);
 
-        void setDirected(bool directed);
-        void setWeighted(bool weighted);
+        bool has_edge(std::string vertex_one, std::string vertex_two);
+        bool insert_edge(std::string vertex_one, std::string vertex_two);
+        bool remove_edge(std::string vertex_one, std::string vertex_two);
 
-        /* Vertex manipulation */
-        bool hasVertex(std::string name_one);
-        bool addVertex(std::string name_one);
-        bool deleteVertex(std::string name_one);
+        bool is_connected();
+        bool is_fully_connected();
+        bool is_fully_disconnected();
 
-        /* Edge manipulation */
-        bool hasEdge(std::string name_one, std::string name_two);
-        bool addEdge(std::string name_one, std::string name_two, float weight);
-        bool deleteEdge(std::string name_one, std::string name_two);
-
-        /* Connectivity */
-        bool isFullyConnected();
-        bool isFullyDisconnected();
-        bool isConnected();
-
-        void printGraph();
+        std::string to_string();
     protected:
     private:
         bool weighted;
         bool directed;
 
-        int edge_count;
         int vertex_count;
+        int edge_count;
 
-        std::vector < std::string > vertices;
-        std::vector < std::vector <float > > weights;
+        std::vector< std::string > vertices;
+        std::vector< std::vector < float> > edges;
 
-        int vertexIndex(std::string name_one);
-        int insertIndex(std::string name_one);
+        int get_vertex_index(std::string vertex_one);
+        int get_insert_vertex_index(std::string vertex_one);
 };
 
 #endif // GRAPH_H
