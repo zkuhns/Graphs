@@ -6,18 +6,6 @@ Graph::Graph(bool weighted, bool directed) {
 
     vertex_count = 0;
     edge_count = 0;
-
-    insert_vertex("B");
-    insert_vertex("A");
-    insert_vertex("C");
-
-    insert_edge("A", "B", 4);
-    insert_edge("A", "C", 4);
-    remove_edge("B", "C");
-
-    insert_vertex("C");
-
-    std::cout << to_string();
 }
 
 Graph::~Graph() {
