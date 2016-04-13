@@ -125,6 +125,10 @@ bool Graph::insert_edge(std::string vertex_one, std::string vertex_two, float we
         weight = 0;
     }
 
+    if (edges[index_one][index_two] != -1) {
+        return false;
+    }
+
     edges[index_one][index_two] = weight;
     edge_count++;
     if (!directed) {
@@ -161,6 +165,34 @@ bool Graph::remove_edge(std::string vertex_one, std::string vertex_two) {
 }
 
 bool Graph::is_connected() {
+    if (vertex_count < 2) {
+        return true;
+    }
+
+    if (!is_connected(vertices[0])) {
+        return false;
+    }
+
+    std::vector< std::string > connected;
+    std::vector< std::string > disconnected = vertices;
+    connected.push_back(disconnected[0]);
+    disconnected.erase(disconnected.begin());
+
+    for (int i = 0; i < disconnected.size(); i++) {
+        for (int j = 0; j < connected.size(); j++) {
+            if (has_edge(disconnected[i], connected[j])) {
+                connected.push_back(disconnected[i]);
+                disconnected.erase(disconnected.begin() + i);
+                i--;
+                break;
+            }
+        }
+    }
+
+    if (disconnected.size() > 0) {
+        return false;
+    }
+
     return true;
 }
 
@@ -178,6 +210,7 @@ bool Graph::is_connected(std::string vertex_one) {
     while (connected.size() > 0) {
         for (int i = 0; i < disconnected.size(); i++) {
             if (has_edge(connected[0], disconnected[i])) {
+                connected.push_back(disconnected[i]);
                 disconnected.erase(disconnected.begin() + i);
                 i--;
             }
@@ -218,6 +251,7 @@ std::string Graph::to_string() {
     return_string += "\n";
 
     for (int i = 0; i < vertex_count; i++) {
+        return_string += vertices[i];
         for (int j = 0; j < vertex_count; j++) {
             ss << edges[i][j];
             return_string += ss.str();

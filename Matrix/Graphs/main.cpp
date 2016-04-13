@@ -16,12 +16,13 @@ int main() {
     graph.insert_vertex("C");
 
     graph.insert_edge("A", "B", 5);
-    graph.insert_edge("B", "C", 4);
-    //graph.insert_edge("C", "D", 6);
-    graph.insert_edge("B", "E", 1);
-    graph.insert_edge("A", "F", 2);
-
-    cout << graph.is_connected("A");
+    graph.insert_edge("C", "B", 5);
+    graph.insert_edge("D", "B", 5);
+    graph.insert_edge("E", "B", 5);
+    graph.insert_edge("F", "B", 5);
 
     cout << graph.to_string();
+
+    cout << graph.is_connected("A");
+    cout << graph.is_connected();
 }
