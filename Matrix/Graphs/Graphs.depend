@@ -1,0 +1,11 @@
+# depslib dependency file v1.0
+1460565539 source:c:\users\zach\documents\github\graphs\matrix\graphs\main.cpp
+	<iostream>
+
+1460567380 source:c:\users\zach\documents\github\graphs\matrix\graphs\src\graph.cpp
+	"Graph.h"
+
+1460567363 c:\users\zach\documents\github\graphs\matrix\graphs\include\graph.h
+	<vector>
+	<string>
+
