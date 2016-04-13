@@ -5,5 +5,5 @@
 using namespace std;
 
 int main() {
-    Graph graph;
+    Graph graph(true, false);
 }

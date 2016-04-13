@@ -1,15 +1,16 @@
 # depslib dependency file v1.0
-1460573452 source:c:\users\zach\documents\github\graphs\matrix\graphs\main.cpp
+1460579888 source:c:\users\zach\documents\github\graphs\matrix\graphs\main.cpp
 	<iostream>
 	<Graph.h>
 
-1460575087 source:c:\users\zach\documents\github\graphs\matrix\graphs\src\graph.cpp
+1460580962 source:c:\users\zach\documents\github\graphs\matrix\graphs\src\graph.cpp
 	"Graph.h"
-	<iostream>
 
-1460573829 c:\users\zach\documents\github\graphs\matrix\graphs\include\graph.h
+1460580107 c:\users\zach\documents\github\graphs\matrix\graphs\include\graph.h
+	<iostream>
 	<vector>
 	<string>
+	<sstream>
 
 1460570557 source:c:\users\zach\documents\github\graphs\matrix\graphs\src\vertex.cpp
 	"Vertex.h"

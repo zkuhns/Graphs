@@ -5,21 +5,26 @@ Matrix implementation
 #ifndef GRAPH_H
 #define GRAPH_H
 
+#include <iostream>
 #include <vector>
 #include <string>
+#include <sstream>
 
 class Graph
 {
     public:
-        Graph();
+        Graph(bool weighted, bool directed);
         virtual ~Graph();
+
+        int get_vertex_count();
+        int get_edge_count();
 
         bool has_vertex(std::string vertex_one);
         bool insert_vertex(std::string vertex_one);
         bool remove_vertex(std::string vertex_one);
 
         bool has_edge(std::string vertex_one, std::string vertex_two);
-        bool insert_edge(std::string vertex_one, std::string vertex_two);
+        bool insert_edge(std::string vertex_one, std::string vertex_two, float weight);
         bool remove_edge(std::string vertex_one, std::string vertex_two);
 
         bool is_connected();
