@@ -1,0 +1,14 @@
+# depslib dependency file v1.0
+1460653402 source:c:\users\zach\documents\github\graphs\list\graphs\main.cpp
+	<iostream>
+	<Graph.h>
+
+1460653419 source:c:\users\zach\documents\github\graphs\list\graphs\src\graph.cpp
+	"Graph.h"
+
+1460603406 c:\users\zach\documents\github\graphs\list\graphs\include\graph.h
+	<iostream>
+	<vector>
+	<string>
+	<sstream>
+

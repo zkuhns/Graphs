@@ -48,11 +48,8 @@ bool Graph::insert_vertex(std::string vertex_one) {
     vertices.insert(vertices.begin()+insert_index, vertex_one);
     vertex_count++;
 
-    edges.insert(edges.begin()+insert_index, std::vector<float>(vertex_count-1, -1));
-
-    for (int i = 0; i < vertex_count; i++) {
-        edges[i].insert(edges[i].begin()+insert_index, -1);
-    }
+    edges.insert(edges.begin()+insert_index, std::vector< std::string* >());
+    weights.insert(weights.begin()+insert_index, std::vector< float >());
 
     return true;
 }
@@ -67,17 +64,6 @@ bool Graph::remove_vertex(std::string vertex_one) {
         return false;
     }
 
-    for (int i = 0; i < vertex_count; i++) {
-        if (edges[i][remove_index] != -1) {
-            edge_count--;
-        }
-        if (edges[remove_index][i] != -1) {
-            edge_count--;
-        }
-        edges[i].erase(edges[i].begin() + remove_index);
-    }
-    edges.erase(edges.begin() + remove_index);
-
     /* Remove the vertex from the vertices vector */
     vertices.erase(vertices.begin()+remove_index);
     vertex_count--;
@@ -85,39 +71,32 @@ bool Graph::remove_vertex(std::string vertex_one) {
     return true;
 }
 
-/* Returns true if the edge exists between two
- * vertices */
 bool Graph::has_edge(std::string vertex_one, std::string vertex_two) {
-    int index_one = get_vertex_index(vertex_one);
-    if (index_one == -1) {
-        return false;
-    }
-    int index_two = get_vertex_index(vertex_two);
-    if (index_two == -1) {
+    int vertex_index_one = get_vertex_index(vertex_one);
+    if (vertex_index_one == -1) {
         return false;
     }
 
-    if (edges[index_one][index_two] == -1) {
+    int vertex_index_two = get_vertex_index(vertex_two);
+    if (vertex_index_two == -1) {
+        return false;
+    }
+
+    if (get_edge_index(vertex_two, edges[vertex_index_one]) == -1) {
         return false;
     }
 
     return true;
 }
 
-/* Attempts to insert an edge between two vertices
- * returns true if the action was successful
- * false otherwise */
 bool Graph::insert_edge(std::string vertex_one, std::string vertex_two, float weight) {
-    int index_one = get_vertex_index(vertex_one);
-    if (index_one == -1) {
-        return false;
-    }
-    int index_two = get_vertex_index(vertex_two);
-    if (index_two == -1) {
+    int vertex_one_index = get_vertex_index(vertex_one);
+    if (vertex_one_index == -1) {
         return false;
     }
 
-    if (edges[index_one][index_two] != -1) {
+    int vertex_two_index = get_vertex_index(vertex_two);
+    if (vertex_two_index == -1) {
         return false;
     }
 
@@ -125,38 +104,50 @@ bool Graph::insert_edge(std::string vertex_one, std::string vertex_two, float we
         weight = 0;
     }
 
-    edges[index_one][index_two] = weight;
+    int edge_one_index = get_insert_edge_index(vertex_two, edges[vertex_one_index]);
+    if (edge_one_index == -1) {
+        return false;
+    }
+
+    edges[vertex_one_index].insert(edges[vertex_one_index].begin() + edge_one_index, &vertices[vertex_two_index]);
+    weights[vertex_one_index].insert(weights[vertex_one_index].begin() + edge_one_index, weight);
     edge_count++;
     if (!directed) {
-        edges[index_two][index_one] = weight;
+        int edge_two_index = get_insert_edge_index(vertex_one, edges[vertex_two_index]);
+        edges[vertex_two_index].insert(edges[vertex_two_index].begin() + edge_two_index, &vertices[vertex_one_index]);
+        weights[vertex_two_index].insert(weights[vertex_two_index].begin() + edge_two_index, weight);
         edge_count++;
     }
 
     return true;
 }
 
-/* Attempts to remove an edge returns true
- * if the action is successful false otherwise */
 bool Graph::remove_edge(std::string vertex_one, std::string vertex_two) {
-    int index_one = get_vertex_index(vertex_one);
-    if (index_one == -1) {
-        return false;
-    }
-    int index_two = get_vertex_index(vertex_two);
-    if (index_two == -1) {
+    int vertex_one_index = get_vertex_index(vertex_one);
+    if (vertex_one_index == -1) {
         return false;
     }
 
-    if (edges[index_one][index_two] == -1) {
+    int vertex_two_index = get_vertex_index(vertex_two);
+    if (vertex_two_index == -1) {
         return false;
     }
 
-    edges[index_one][index_two] = -1;
+    int edge_one_index = get_edge_index(vertex_two, edges[vertex_one_index]);
+    if (edge_one_index == -1) {
+        return false;
+    }
+
+    edges[vertex_one_index].erase(edges[vertex_one_index].begin() + edge_one_index);
+    weights[vertex_one_index].erase(weights[vertex_one_index].begin() + edge_one_index);
     edge_count--;
     if (!directed) {
-        edges[index_two][index_one] = -1;
+        int edge_two_index = get_insert_edge_index(vertex_one, edges[vertex_two_index]);
+        edges[vertex_two_index].erase(edges[vertex_two_index].begin() + edge_two_index);
+        weights[vertex_two_index].erase(weights[vertex_two_index].begin() + edge_two_index);
         edge_count--;
     }
+
     return true;
 }
 
@@ -236,20 +227,14 @@ bool Graph::is_fully_disconnected() {
     return false;
 }
 
-/* Returns a string represntation of the graph */
 std::string Graph::to_string() {
     std::ostringstream ss;
     std::string return_string;
 
     for (int i = 0; i < vertex_count; i++) {
-        return_string += vertices[i] + " ";
-    }
-    return_string += "\n";
-
-    for (int i = 0; i < vertex_count; i++) {
-        return_string += vertices[i];
-        for (int j = 0; j < vertex_count; j++) {
-            ss << edges[i][j];
+        return_string += vertices[i] + "| ";
+        for (int j = 0; j < edges[i].size(); j++) {
+            ss << *edges[i][j] << weights[i][j];
             return_string += ss.str();
             ss.str("");
         }
@@ -325,6 +310,64 @@ int Graph::get_insert_vertex_index(std::string vertex_one) {
         }
     } else {
         if (vertex_one.compare(vertices[mid]) > 0) {
+            mid++;
+        }
+    }
+
+    return mid;
+}
+
+int Graph::get_edge_index(std::string edge_one, std::vector< std::string* > edges) {
+    int min = 0;
+    int mid;
+    int max = edges.size()-1;
+
+    while (min <= max) {
+        mid = (min + max) / 2;
+
+        if (edge_one.compare(*edges[mid]) == 0) {
+            return mid;
+        }
+
+        if (edge_one.compare(*edges[mid]) < 0) {
+            max = mid - 1;
+        } else {
+            min = mid + 1;
+        }
+    }
+
+    return -1;
+}
+
+int Graph::get_insert_edge_index(std::string edge_one, std::vector< std::string* > edges) {
+    if (edges.size() == 0) {
+        return 0;
+    }
+
+    int min = 0;
+    int mid;
+    int max = edges.size()-1;
+
+    while (min <= max) {
+        mid = (min + max) / 2;
+
+        if (edge_one.compare(*edges[mid]) == 0) {
+            return -1;
+        }
+
+        if (edge_one.compare(*edges[mid]) < 0) {
+            max = mid - 1;
+        } else {
+            min = mid + 1;
+        }
+    }
+
+    if (mid == 0) {
+        if (edge_one.compare(*edges[mid]) >= 0) {
+            mid++;
+        }
+    } else {
+        if (edge_one.compare(*edges[mid]) > 0) {
             mid++;
         }
     }
