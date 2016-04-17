@@ -24,27 +24,19 @@ int Graph::get_edge_count() {
     }
 }
 
-/* Returns true if the vertex exists within the graph
- * false otherwise. */
 bool Graph::has_vertex(std::string vertex_one) {
-    /* Vertex does not exist */
     if (get_vertex_index(vertex_one) == -1) {
         return false;
     }
     return true;
 }
 
-/* Attempts to insert a new vertex into the graph
- * returns true if the insertion was successful
- * false otherwise. */
 bool Graph::insert_vertex(std::string vertex_one) {
-    /* Vertex already exists */
     int insert_index = get_insert_vertex_index(vertex_one);
     if (insert_index == -1) {
         return false;
     }
 
-    /* Insert a new vertex into the vertices vector */
     vertices.insert(vertices.begin()+insert_index, vertex_one);
     vertex_count++;
 
@@ -54,17 +46,12 @@ bool Graph::insert_vertex(std::string vertex_one) {
     return true;
 }
 
-/* Attempts to remove a vertex from the graph
- * returns true if the removal was successful
- * false otherwise. */
 bool Graph::remove_vertex(std::string vertex_one) {
-    /* Vertex does not exist */
     int remove_index = get_vertex_index(vertex_one);
     if (remove_index == -1) {
         return false;
     }
 
-    /* Remove the vertex from the vertices vector */
     vertices.erase(vertices.begin()+remove_index);
     vertex_count--;
 
@@ -254,9 +241,6 @@ std::string Graph::to_string() {
     return return_string;
 }
 
-/* Returns the index of a vertex in the vertex
- * vector, -1 is returned if the vertex is not
- * found */
 int Graph::get_vertex_index(std::string vertex_one) {
     int min = 0;
     int mid;
@@ -279,8 +263,6 @@ int Graph::get_vertex_index(std::string vertex_one) {
     return -1;
 }
 
-/* Gets the expected index of a vertex insertion
- * returns -1 if the vertex already exists */
 int Graph::get_insert_vertex_index(std::string vertex_one) {
     if (vertex_count == 0) {
         return 0;
