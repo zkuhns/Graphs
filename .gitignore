@@ -1,6 +1,8 @@
 .cbp
 .depend
 .layout
+.o
+.exe
 /bin
 /List/Graphs/object
 /Matrix/Graphs/object
