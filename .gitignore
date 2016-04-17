@@ -1,2 +1,6 @@
 .cbp
 .depend
+.layout
+/bin
+/List/Graphs/object
+/Matrix/Graphs/object
