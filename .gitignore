@@ -4,5 +4,5 @@
 .o
 .exe
 /bin
-/List/Graphs/object
-/Matrix/Graphs/object
+**/obj
+**/bin
